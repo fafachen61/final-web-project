@@ -1,0 +1,8 @@
+{
+  "env": {
+    "MONGO_USER": "andyko0620",
+    "MONGO_PASSWORD": "andyko2318",
+    "MONGO_DATABASE": "final_project",
+    "SENDGRID_KEY": "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"
+  }
+}

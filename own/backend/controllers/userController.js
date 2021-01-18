@@ -12,15 +12,14 @@ const app = require("../app");
 
 exports.getRestaurants = (req, res, next) => {
   Seller.find()
-    .populate("account", "isVerified")
     .sort({ createdAt: -1 })
     .then((sellers) => {
-      const sellersFinal = sellers.filter((restaurant) => {
-        return restaurant.account.isVerified === true;
-      });
+      // const sellersFinal = sellers.filter((restaurant) => {
+      //   return restaurant.account.isVerified === true;
+      // });
       res.status(200).json({
-        restaurants: sellersFinal,
-        totalItems: sellersFinal.length,
+        restaurants: sellers,
+        totalItems: sellers.length,
       });
     })
     .catch((err) => {

@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const Account = require("../models/account");
 const Seller = require("../models/seller");
+const account = require("../models/account");
 
 const transporter = nodemailer.createTransport(
   sendgridTransport({
@@ -114,45 +115,73 @@ exports.verifyAccount = (req, res, next) => {
     });
 };
 
-exports.login = (req, res, next) => {
+exports.login = async(req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   let loadedUser;
-
-  Account.findOne({ email: email })
-    .then((account) => {
-      if (!account) {
-        const error = new Error("Invalid email/password combination.");
-        error.statusCode = 401;
-        throw error;
-      }
-      loadedUser = account;
-      return bcrypt.compare(password, account.password);
-    })
-    .then((isEqual) => {
-      if (!isEqual) {
-        const error = new Error("Invalid email/password combination.");
-        error.statusCode = 401;
-        throw error;
-      }
-      // if (loadedUser.isVerified === false) {
-      //   const error = new Error(
-      //     "Verify your email before accessing the platform."
-      //   );
-      //   error.statusCode = 401;
-      //   throw error;
-      // }
-      const token = jwt.sign(
-        { accountId: loadedUser._id.toString() },
-        "supersecretkey-foodWebApp",
-        { expiresIn: "10h" }
-      );
-      res.status(200).json({ message: "Logged-in successfully", token: token });
-    })
-    .catch((err) => {
-      if (!err.statusCode) err.statusCode = 500;
-      next(err);
-    });
+  const account = await Account.findOne({ email: email })
+  try{
+    if (!account) {
+      const error = new Error("Invalid email/password combination.");
+      error.statusCode = 401;
+      throw error;
+    }
+    loadedUser = account;
+    const isEqual = await bcrypt.compare(password, account.password);
+    if(!isEqual) {
+      const error = new Error("Invalid email/password combination.");
+      error.statusCode = 401;
+      throw error;
+    }
+    else{
+      account.isVerified = true;
+      account.accountVerifyToken = undefined;
+      account.accountVerifyTokenExpiration = undefined;
+      await account.save()
+    }
+    const token = jwt.sign(
+      { accountId: loadedUser._id.toString() },
+      "supersecretkey-foodWebApp",
+      { expiresIn: "10h" }
+    );
+    res.status(200).json({ message: "Logged-in successfully", token: token });
+  }
+  catch(err){
+    if (!err.statusCode) err.statusCode = 500;
+    next(err);
+  }
+  
+  // Account.findOne({ email: email })
+  //   .then((account) => {
+  //     if (!account) {
+  //       const error = new Error("Invalid email/password combination.");
+  //       error.statusCode = 401;
+  //       throw error;
+  //     }
+  //     loadedUser = account;
+  //     const isEqual = await bcrypt.compare(password, account.password);
+  //     // if(!isEqual) {
+  //     //   const error = new Error("Invalid email/password combination.");
+  //     //   error.statusCode = 401;
+  //     //   throw error;
+  //     // }
+  //     // else{
+  //     //   account.isVerified = true;
+  //     //   account.accountVerifyToken = undefined;
+  //     //   account.accountVerifyTokenExpiration = undefined;
+  //     //   await account.save()
+  //     // }
+  //     // const token = jwt.sign(
+  //     //   { accountId: loadedUser._id.toString() },
+  //     //   "supersecretkey-foodWebApp",
+  //     //   { expiresIn: "10h" }
+  //     // );
+  //     // res.status(200).json({ message: "Logged-in successfully", token: token });
+  //   })
+  //   .catch((err) => {
+  //     if (!err.statusCode) err.statusCode = 500;
+  //     next(err);
+  //   });
 };
 
 exports.signupSeller = (req, res, next) => {

@@ -278,6 +278,7 @@ exports.getLoggedInUser = (req, res, next) => {
 exports.postOrder = (req, res, next) => {
   let accountObj;
   let userObj;
+  console.log(`req=${req}`)
   Account.findById(req.loggedInUserId)
     .then((account) => {
       accountObj = account;

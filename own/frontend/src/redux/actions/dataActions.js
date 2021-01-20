@@ -257,6 +257,7 @@ export const placeOrder = (history) => (dispatch) => {
   axios
     .post("/order")
     .then((res) => {
+      console.log(`history=${history}`)
       history.push("/orders");
       dispatch(getOrders());
     })

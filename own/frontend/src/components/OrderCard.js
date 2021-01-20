@@ -126,20 +126,25 @@ const OrderCard = (props) => {
         </Typography>
         {role === "ROLE_USER" &&  order.status !== "Placed"  && order.status !=="Cancelled" &&
         (<Typography gutterBottom variant="body1" color="textPrimary">
-          訂位優先順序 {order.bookingPriority} 
+          訂位優先順序: {order.bookingPriority} 
         </Typography>)}
         <Typography gutterBottom variant="body1" color="textPrimary">
-          {role === "ROLE_USER" && `Ordered From - ${order.seller.name}`}
+          {role === "ROLE_USER" && `訂位餐廳 - ${order.seller.name}`}
           {role === "ROLE_SELLER" &&
-            `Ordered By - ${order.user.name}, +886 ${order.user.address.phoneNo}`}
+            `訂位大名 - ${order.user.name}, +886 ${order.user.address.phoneNo}`}
         </Typography>
         {role === "ROLE_USER" && (
           <Typography gutterBottom variant="body1" color="textPrimary">
             Call - +886 {order.seller.phone}
           </Typography>
         )}
-
-        {role === "ROLE_SELLER" && (
+        <Typography gutterBottom variant="body1" color="textPrimary">
+            訂位時間:{order.bookingTime}
+        </Typography>
+        <Typography gutterBottom variant="body1" color="textPrimary">
+            訂位人數:{order.bookingNumbers}
+        </Typography> 
+        {/* {role === "ROLE_SELLER" && (
           <Typography gutterBottom variant="body1" color="textPrimary">
             Address -{" "}
             {
@@ -148,12 +153,12 @@ const OrderCard = (props) => {
               // `${order.user.address.street}`)
             }
           </Typography>
-        )}
+        )} */}
         <div style={{ margin: "10px 20px 10px 0px" }}>
           <SummaryExpansion condition="Orders" items={order.items} />
         </div>
         <Typography gutterBottom variant="body1" color="textPrimary">
-          Ordered - {dayjs(order.createdAt).fromNow()}
+          Reserved - {dayjs(order.createdAt).fromNow()}
         </Typography>
           
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -164,7 +169,7 @@ const OrderCard = (props) => {
             }
           />
           <Typography gutterBottom variant="body1" color="textPrimary">
-            Order {order.status} 
+            Reservaton {order.status} 
           </Typography>
         </div>
         {role === "ROLE_USER" && order.status === "Placed" && (
@@ -173,29 +178,24 @@ const OrderCard = (props) => {
             onClick={handleCancel}
             disabled={order.status !== "Placed"}
           >
-            Cancel Order
+            Cancel Reservation
           </Button>
         )}
         {role === "ROLE_SELLER" && order.status === "Placed" && (
           <>
             <div style={{ display: "inline-block" }}>
               <Button className={classes.buttonCancel} onClick={handleCancel}>
-                Cancel Order
+                Cancel Reservation
               </Button>
               <Button className={classes.buttonAccept} onClick={handleAccept}>
-                Accept Order
+                Accept Reservation
               </Button>
             </div>
           </>
         )}
         {role === "ROLE_SELLER" && order.status === "Accepted" && (
-          <Button className={classes.buttonAccept} onClick={handleDelivery}>
-            Out For Delivery
-          </Button>
-        )}
-        {role === "ROLE_SELLER" && order.status === "Out For Delivery" && (
           <Button className={classes.buttonAccept} onClick={handleCompleted}>
-            Order Completed
+            Reservation Completed
           </Button>
         )}
         <br />

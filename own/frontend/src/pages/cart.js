@@ -74,17 +74,18 @@ const Cart = (props) => {
 
   const handlePlaceOrder = () => {
     const userData = {
-      street: inputs.street,
-      aptName: inputs.aptName,
-      locality: inputs.locality,
-      zip: inputs.zip,
+      street: "建成路59巷",
+      aptName: "7號6樓",
+      locality: "新北市汐止區",
+      zip: "221",
       phoneNo: inputs.phoneNo,
       bookingTime: inputs.bookingTime,
       bookingNumbers: inputs.bookingNumbers
     };
+    console.log(`props.location.state=${props.location.state}`)
     dispatch(fetchAddress(userData, history));
   };
-
+  console.log(`props.location.state=${props.location.state}`)
   const { inputs, handleInputChange } = useForm({
     street:
       props.location.state.address != null &&
@@ -116,6 +117,9 @@ const Cart = (props) => {
       props.location.state.address != undefined
         ? props.location.state.address.phoneNo
         : "",
+    // bookingNumbers: 
+    //   props.location.state.
+    //  bookingTime: ""
 
   });
 
@@ -167,16 +171,16 @@ const Cart = (props) => {
                 ))}
               {step === 2 && (
                 <form>
-                  <Typography
+                  {/* <Typography
                     variant="body2"
                     component="p"
                     style={{ margin: "10px 10px 2px 10px" }}
                   >
                     Address:
-                  </Typography>
+                  </Typography> */}
                   <div className={classes.address}>
                    
-                    <TextField
+                    {/* <TextField
                       id="locality"
                       name="locality"
                       label="Locality"
@@ -224,7 +228,7 @@ const Cart = (props) => {
                       type="number"
                       fullWidth
                       required
-                    />
+                    /> */}
                     <TextField
                       id="phoneNo"
                       name="phoneNo"
@@ -244,8 +248,9 @@ const Cart = (props) => {
                       label="訂位人數"
                       className={classes.textField}
                       type="number"
-                      // onChange={handleInputChange}
-                      value="4"
+                      onChange={handleInputChange}
+                      value={inputs.bookingNumbers}
+                      error={bookingNumbersError ? true: false}
                       fullWidth
                       required
                     />
@@ -255,8 +260,9 @@ const Cart = (props) => {
                       label="訂位時間"
                       className={classes.textField}
                       type="string"
-                      // onChange={handleInputChange}
-                      value="12:20"
+                      onChange={handleInputChange}
+                      value={inputs.bookingTime}
+                      error={bookingTimeError ? true: false}
                       fullWidth
                       required
                     /> 
@@ -283,13 +289,13 @@ const Cart = (props) => {
                       <>
                       <div className={classes.spaceTypo}>
                         <span>Initial amount</span>
-                        <span>Rs. {price}</span>
+                        <span>$ {price}</span>
                       </div>
                       <br />
                       <br />
                       <div className={classes.spaceTypo}>
-                        <span>Delivery Charge</span>
-                        <span>Rs. {deliveryCharge}</span>
+                        <span>processing fee</span>
+                        <span>$ {deliveryCharge}</span>
                       </div>
                       <br />
                       </>
@@ -306,7 +312,7 @@ const Cart = (props) => {
                           <div className={classes.spaceTypo}>
                             <span>{item.itemId.title}</span>
                             <span>
-                              Rs.
+                              $
                               {item.itemId.price} x {item.quantity}
                             </span>
                           </div>
@@ -318,7 +324,7 @@ const Cart = (props) => {
                   <Typography gutterBottom variant="h5" noWrap>
                     <div className={classes.spaceTypo}>
                       <span>Grand Total</span>
-                      <span>Rs. {price + deliveryCharge}</span>
+                      <span>$ {price + deliveryCharge}</span>
                     </div>
                     <br />
                   </Typography>
@@ -338,7 +344,7 @@ const Cart = (props) => {
                       className={classes.checkoutButton}
                       onClick={handlePlaceOrder}
                     >
-                      Place Order
+                      Place Reservation
                     </Button>
                   )}
                 </div>

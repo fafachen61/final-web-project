@@ -25,6 +25,14 @@ const orderSchema = new Schema(
       type: Number,
       default: 1,
     },
+    bookingNumbers: {
+      type: Number,
+      default: 4,
+    },
+    bookingTime: {
+      type: String,
+      default: "12:20"
+    },
     user: {
       email: {
         type: String,

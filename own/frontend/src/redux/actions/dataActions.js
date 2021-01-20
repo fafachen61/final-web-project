@@ -236,7 +236,7 @@ export const addAddress = (userData, history) => (dispatch) => {
       // console.log(res.data);
       dispatch(getUserData());
       dispatch({ type: CLEAR_ERRORS });
-      dispatch(placeOrder(userData,history));   //adding
+      dispatch(placeOrder(history));
     })
     .catch((err) => {
       console.log(err.response);
@@ -253,9 +253,9 @@ export const addAddress = (userData, history) => (dispatch) => {
     });
 };
 
-export const placeOrder = (userData,history) => (dispatch) => {
+export const placeOrder = (history) => (dispatch) => {
   axios
-    .post("/order",userData)
+    .post("/order")
     .then((res) => {
       console.log(`history=${history}`)
       history.push("/orders");

@@ -64,7 +64,7 @@ export default function AppBarPrimary() {
                 Seller Dashboard
               </Typography>
               <Link to="/seller/orders">
-                <Button className={classes.buttonStyles}>Orders</Button>
+                <Button className={classes.buttonStyles}>Order</Button>
               </Link>
               <Button
                 onClick={handleLogout}
@@ -79,6 +79,9 @@ export default function AppBarPrimary() {
               <Typography className={classes.buttonStyles}>
                 Hello, {firstName} {lastName}
               </Typography>
+              <Link to="/map">
+                <Button className={classes.buttonStyles}>Map mode</Button>
+              </Link>
               <Link to="/orders">
                 <Button className={classes.buttonStyles}>Orders</Button>
               </Link>

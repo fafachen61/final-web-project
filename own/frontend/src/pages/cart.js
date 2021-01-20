@@ -51,8 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Cart = (props) => {
   const [step, setStep] = useState(1);
-  const [bookingNumbers,setbookingNumbers] = useState();
-  const [bookingTime,setbookingTime] = useState("")
+
   const dispatch = useDispatch();
   const classes = useStyles();
   const { loading, cart, price } = useSelector((state) => state.data);
@@ -80,13 +79,13 @@ const Cart = (props) => {
       locality: "新北市汐止區",
       zip: "221",
       phoneNo: inputs.phoneNo,
-      bookingTime: bookingTime,
-      bookingNumbers: bookingNumbers
+      bookingTime: inputs.bookingTime,
+      bookingNumbers: inputs.bookingNumbers
     };
-    console.log(`userData=${userData}`)
     console.log(`props.location.state=${props.location.state}`)
     dispatch(fetchAddress(userData, history));
   };
+  console.log(`props.location.state=${props.location.state}`)
   const { inputs, handleInputChange } = useForm({
     street:
       props.location.state.address != null &&
@@ -119,13 +118,8 @@ const Cart = (props) => {
         ? props.location.state.address.phoneNo
         : "",
     // bookingNumbers: 
-    //   props.location.state.bookingNumbers != null &&
-    //   props.location.state.bookingNumbers != undefined
-    //   ?  props.location.state.bookingNumbers : "",
-    //  bookingTime: 
-    //   props.location.state.bookingTime != null &&
-    //   props.location.state.bookingTime != undefined
-    //   ? props.location.state.bookingTime : "",
+    //   props.location.state.
+    //  bookingTime: ""
 
   });
 
@@ -160,7 +154,7 @@ const Cart = (props) => {
         <>
           <Typography variant="h5" className={classes.title}>
             {step === 1 && `Cart (${cartItems} Items)`}
-            {step === 2 && "Reservation Details"}
+            {step === 2 && "Delivery Details"}
           </Typography>
           {step === 2 && (
             <MyButton tip="Go Back" onClick={prevStep}>
@@ -254,8 +248,8 @@ const Cart = (props) => {
                       label="訂位人數"
                       className={classes.textField}
                       type="number"
-                      onChange={(e)=>setbookingNumbers(e.target.value)}
-                      value={bookingNumbers}
+                      onChange={handleInputChange}
+                      value={inputs.bookingNumbers}
                       error={bookingNumbersError ? true: false}
                       fullWidth
                       required
@@ -266,8 +260,8 @@ const Cart = (props) => {
                       label="訂位時間"
                       className={classes.textField}
                       type="string"
-                      onChange={(e)=>setbookingTime(e.target.value)}
-                      value={bookingTime}
+                      onChange={handleInputChange}
+                      value={inputs.bookingTime}
                       error={bookingTimeError ? true: false}
                       fullWidth
                       required

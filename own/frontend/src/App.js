@@ -41,6 +41,7 @@ import restaurant from "./pages/restaurant";
 import sellerDash from "./pages/sellerDashboard";
 import cart from "./pages/cart";
 import orders from "./pages/orders";
+import map from "./pages/map"
 
 const theme = createMuiTheme(themeFile);
 
@@ -78,6 +79,7 @@ function App() {
               component={sellerDash}
             />
             <UserRoute exact path="/cart" component={cart} />
+            <UserRoute exact path="/map" component={map} />
             <UserRoute exact path="/orders" component={orders} />
             <SellerRoute exact path="/seller/orders" component={orders} />
             <Route component={error404} />

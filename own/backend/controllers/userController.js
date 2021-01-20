@@ -343,7 +343,7 @@ exports.postOrder = (req, res, next) => {
     });
 };
 
-exports.getOrders = (req, res, next) => {
+exports.getOrders = async(req, res, next) => {
   const authHeader = req.get("Authorization");
   if (!authHeader) {
     const error = new Error("Not authenticated");
@@ -366,31 +366,78 @@ exports.getOrders = (req, res, next) => {
   }
 
   const accountId = decodedToken.accountId;
+  try{
+    const account = await Account.findById(accountId)
+    let result
+    if (account.role === "ROLE_USER")
+      { result = await User.findOne({ account: account._id });}
+    if (account.role === "ROLE_SELLER")
+      {result = await Seller.findOne({ account: account._id });}
+    let orders
+    if (result instanceof User) {
+      orders = await Order.find({ "user.userId": result._id }).sort({
+        createdAt: -1,
+      });
+      orders.map( async(order)=>{
+        let seller =await Seller.findById(order.seller.sellerId)
+        console.log(order.seller.sellerId)
+        let sellerOrders = await Order.find( {"seller.sellerId":seller._id }).sort({
+          createdAt: -1,
+        });
+        console.log(sellerOrders)
+         let index = sellerOrders.findIndex(sellerorder=> sellerorder._id.toString() === order._id.toString())
+        // let index=0 
+        // for(let i=0;i<sellerOrders.length;i++){
+        //   console.log(sellerOrders[i]._id)
+        //   if(sellerOrders[i]._id.toString() === order._id.toString()){
+        //     index =i
+        //   }
+        // }
+        // console.log(order._id)
+        // console.log(index)
+        console.log(orders.length)
+        order.bookingPriority = sellerOrders.length-index
+        console.log(order.bookingPriority)
+      })
+    }
+    if (result instanceof Seller) {
+      orders = await Order.find({ "seller.sellerId": result._id }).sort({
+        createdAt: -1,
+      });
+      orders.map((order,index)=>{
+        order.bookingPriority = orders.length - index;
+      })
+    }
+    res.status(200).json({ orders });
+  }catch{(err) => {
+    if (!err.statusCode) err.statusCode = 500;
+    next(err);
+  }}
+  // Account.findById(accountId)
+  //   .then((account) => {
+  //     if (account.role === "ROLE_USER")
+  //       return User.findOne({ account: account._id });
+  //     if (account.role === "ROLE_SELLER")
+  //       return Seller.findOne({ account: account._id });
+  //   })
+  //   .then((result) => {
+  //     if (result instanceof User)
+  //       return Order.find({ "user.userId": result._id }).sort({
+  //         createdAt: -1,
+  //       });
+  //     if (result instanceof Seller)
 
-  Account.findById(accountId)
-    .then((account) => {
-      if (account.role === "ROLE_USER")
-        return User.findOne({ account: account._id });
-      if (account.role === "ROLE_SELLER")
-        return Seller.findOne({ account: account._id });
-    })
-    .then((result) => {
-      if (result instanceof User)
-        return Order.find({ "user.userId": result._id }).sort({
-          createdAt: -1,
-        });
-      if (result instanceof Seller)
-        return Order.find({ "seller.sellerId": result._id }).sort({
-          createdAt: -1,
-        });
-    })
-    .then((orders) => {
-      res.status(200).json({ orders });
-    })
-    .catch((err) => {
-      if (!err.statusCode) err.statusCode = 500;
-      next(err);
-    });
+  //       return Order.find({ "seller.sellerId": result._id }).sort({
+  //         createdAt: -1,
+  //       });
+  //   })
+  //   .then((orders) => {
+  //     res.status(200).json({ orders });
+  //   })
+  //   .catch((err) => {
+  //     if (!err.statusCode) err.statusCode = 500;
+  //     next(err);
+  //   });
 };
 
 exports.postOrderStatus = (req, res, next) => {
@@ -433,7 +480,7 @@ exports.postOrderStatus = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-
+      order.bookingPriority = req.body.bookingPriority;
       order.status = status;
       return order.save();
     })

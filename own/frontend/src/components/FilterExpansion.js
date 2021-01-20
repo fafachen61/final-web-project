@@ -57,6 +57,7 @@ export default function SimpleExpansionPanel(props) {
                     color="textPrimary"
                     key={item.item._id}
                   >
+                  <>
                     <div className={classes.spaceTypo}>
                       <span>{item.item.title}</span>
                       <span>
@@ -65,6 +66,7 @@ export default function SimpleExpansionPanel(props) {
                       </span>
                     </div>
                     <br />
+                  </>
                   </Typography>
                 );
               })}

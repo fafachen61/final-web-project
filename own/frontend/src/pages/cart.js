@@ -67,6 +67,8 @@ const Cart = (props) => {
   let localityError = null;
   let zipError = null;
   let phoneNoError = null;
+  let bookingTimeError = null;
+  let bookingNumbersError = null;
 
   if (price !== 0) deliveryCharge = 20;
 
@@ -77,6 +79,8 @@ const Cart = (props) => {
       locality: inputs.locality,
       zip: inputs.zip,
       phoneNo: inputs.phoneNo,
+      bookingTime: inputs.bookingTime,
+      bookingNumbers: inputs.bookingNumbers
     };
     dispatch(fetchAddress(userData, history));
   };
@@ -112,6 +116,7 @@ const Cart = (props) => {
       props.location.state.address != undefined
         ? props.location.state.address.phoneNo
         : "",
+
   });
 
   useEffect(() => {
@@ -170,18 +175,7 @@ const Cart = (props) => {
                     Address:
                   </Typography>
                   <div className={classes.address}>
-                    <TextField
-                      id="aptName"
-                      name="aptName"
-                      label="Flat/Apartment Name"
-                      className={classes.textField}
-                      onChange={handleInputChange}
-                      value={inputs.aptName}
-                      helperText={aptError}
-                      error={aptError ? true : false}
-                      fullWidth
-                      required
-                    />
+                   
                     <TextField
                       id="locality"
                       name="locality"
@@ -203,6 +197,18 @@ const Cart = (props) => {
                       value={inputs.street}
                       helperText={streetError}
                       error={streetError ? true : false}
+                      fullWidth
+                      required
+                    />
+                     <TextField
+                      id="aptName"
+                      name="aptName"
+                      label="Flat/Apartment Name"
+                      className={classes.textField}
+                      onChange={handleInputChange}
+                      value={inputs.aptName}
+                      helperText={aptError}
+                      error={aptError ? true : false}
                       fullWidth
                       required
                     />
@@ -232,6 +238,28 @@ const Cart = (props) => {
                       fullWidth
                       required
                     />
+                     <TextField
+                      id="booking numbers"
+                      name="訂位人數"
+                      label="訂位人數"
+                      className={classes.textField}
+                      type="number"
+                      // onChange={handleInputChange}
+                      value="4"
+                      fullWidth
+                      required
+                    />
+                    <TextField
+                      id="booking time"
+                      name="booking time"
+                      label="訂位時間"
+                      className={classes.textField}
+                      type="string"
+                      // onChange={handleInputChange}
+                      value="12:20"
+                      fullWidth
+                      required
+                    /> 
                   </div>
                 </form>
               )}
@@ -252,6 +280,7 @@ const Cart = (props) => {
                   </Typography>
                   {step === 1 && (
                     <Typography variant="body2" color="textPrimary">
+                      <>
                       <div className={classes.spaceTypo}>
                         <span>Initial amount</span>
                         <span>Rs. {price}</span>
@@ -263,6 +292,7 @@ const Cart = (props) => {
                         <span>Rs. {deliveryCharge}</span>
                       </div>
                       <br />
+                      </>
                     </Typography>
                   )}
                   {step === 2 &&

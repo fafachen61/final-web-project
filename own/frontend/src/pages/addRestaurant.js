@@ -67,6 +67,7 @@ export default function AddRestaurant() {
   let tagsError = null;
   let costForOneError = null;
   let minOrderError = null;
+  let remainingSeatsError = null;
   let paymentError = null;
 
   if (errors) {
@@ -101,6 +102,7 @@ export default function AddRestaurant() {
     formData.append("tags", inputs.tags);
     formData.append("costForOne", inputs.costForOne);
     formData.append("minOrderAmount", inputs.minOrderAmount);
+    formData.append("remainingSeats", inputs.remainingSeats);
     formData.append("street", inputs.street);
     formData.append("aptName", inputs.aptName);
     formData.append("locality", inputs.locality);
@@ -120,6 +122,7 @@ export default function AddRestaurant() {
       tags: "",
       costForOne: "",
       minOrderAmount: "",
+      remainingSeats: "",
       street: "",
       aptName: "",
       locality: "",
@@ -218,6 +221,20 @@ export default function AddRestaurant() {
                     value={inputs.minOrderAmount}
                     helperText={minOrderError}
                     error={minOrderError ? true : false}
+                    type="number"
+                    fullWidth
+                    required
+                  />
+                   <TextField
+                    id="remainingSeats"
+                    name="remainingSeats"
+                    label="remainingSeats"
+                    placeholder="Seats available for customers"
+                    className={classes.textField}
+                    onChange={handleInputChange}
+                    value={inputs.remainingSeats}
+                    helperText={remainingSeatsError}
+                    error={remainingSeatsError ? true : false}
                     type="number"
                     fullWidth
                     required

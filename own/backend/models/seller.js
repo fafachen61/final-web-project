@@ -34,6 +34,7 @@ const sellerSchema = new Schema(
     address: addressInfo,
     minOrderAmount: Number,
     costForOne: Number,
+    remainingSeats: Number,
     payment: [
       {
         type: String,

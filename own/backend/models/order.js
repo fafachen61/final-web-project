@@ -21,6 +21,10 @@ const orderSchema = new Schema(
         "Out For Delivery",
       ],
     },
+    bookingPriority: {
+      type: Number,
+      default: 1,
+    },
     user: {
       email: {
         type: String,

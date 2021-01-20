@@ -68,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderCard = (props) => {
   const order = props.order;
+  const bookingPriority = order.bookingPriority;
+  console.log(order)
+  console.log(bookingPriority)
   const role = props.role;
   const classes = useStyles();
   dayjs.extend(relativeTime);
@@ -76,6 +79,7 @@ const OrderCard = (props) => {
   const handleCancel = () => {
     const body = {
       status: "Cancelled",
+      //bookingPriority: bookingPriority 
     };
     dispatch(changeOrderStatus(order._id, body));
   };
@@ -83,6 +87,7 @@ const OrderCard = (props) => {
   const handleAccept = () => {
     const body = {
       status: "Accepted",
+      bookingPriority: bookingPriority
     };
     dispatch(changeOrderStatus(order._id, body));
   };
@@ -90,6 +95,7 @@ const OrderCard = (props) => {
   const handleDelivery = () => {
     const body = {
       status: "Out For Delivery",
+      bookingPriority: bookingPriority
     };
     dispatch(changeOrderStatus(order._id, body));
   };
@@ -97,6 +103,7 @@ const OrderCard = (props) => {
   const handleCompleted = () => {
     const body = {
       status: "Completed",
+      bookingPriority: bookingPriority
     };
     dispatch(changeOrderStatus(order._id, body));
   };
@@ -114,14 +121,21 @@ const OrderCard = (props) => {
         <Typography gutterBottom variant="body1" color="textSecondary">
           OrderId - #{order._id}
         </Typography>
+        <Typography>
+          {role === "ROLE_SELLER" && `訂位優先順序: ${bookingPriority}`}
+        </Typography>
+        {role === "ROLE_USER" &&  order.status !== "Placed"  && order.status !=="Cancelled" &&
+        (<Typography gutterBottom variant="body1" color="textPrimary">
+          訂位優先順序 {order.bookingPriority} 
+        </Typography>)}
         <Typography gutterBottom variant="body1" color="textPrimary">
           {role === "ROLE_USER" && `Ordered From - ${order.seller.name}`}
           {role === "ROLE_SELLER" &&
-            `Ordered By - ${order.user.name}, +91 ${order.user.address.phoneNo}`}
+            `Ordered By - ${order.user.name}, +886 ${order.user.address.phoneNo}`}
         </Typography>
         {role === "ROLE_USER" && (
           <Typography gutterBottom variant="body1" color="textPrimary">
-            Call - +91 {order.seller.phone}
+            Call - +886 {order.seller.phone}
           </Typography>
         )}
 
@@ -141,6 +155,7 @@ const OrderCard = (props) => {
         <Typography gutterBottom variant="body1" color="textPrimary">
           Ordered - {dayjs(order.createdAt).fromNow()}
         </Typography>
+          
         <div style={{ display: "flex", flexDirection: "row" }}>
           <FiberManualRecordIcon
             disabled
@@ -149,7 +164,7 @@ const OrderCard = (props) => {
             }
           />
           <Typography gutterBottom variant="body1" color="textPrimary">
-            Order {order.status}
+            Order {order.status} 
           </Typography>
         </div>
         {role === "ROLE_USER" && order.status === "Placed" && (

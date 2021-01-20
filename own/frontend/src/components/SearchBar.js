@@ -162,13 +162,13 @@ export default function CustomizedInputBase(props) {
               <div className={classes.results}>
                 {loading ? <div>Getting Results...</div> : null}
 
-                {suggestions.map((suggestion) => {
+                {suggestions.map((suggestion,index) => {
                   const style = suggestion.active
                     ? { backgroundColor: "#41b6e6", cursor: "pointer" }
                     : { backgroundColor: "#fff", cursor: "pointer" };
 
                   return (
-                    <div {...getSuggestionItemProps(suggestion, { style })}>
+                    <div {...getSuggestionItemProps(suggestion, { style })} key={index}>
                       {suggestion.description}
                     </div>
                   );

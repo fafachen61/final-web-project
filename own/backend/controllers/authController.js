@@ -210,6 +210,7 @@ exports.signupSeller = (req, res, next) => {
   const paymentArray = payment.split(" ");
   const minOrderAmount = req.body.minOrderAmount;
   const costForOne = req.body.costForOne;
+  const remainingSeats = req.body.remainingSeats;   //紀錄剩餘人數
   const phoneNo = req.body.phoneNo;
   const street = req.body.street;
   const aptName = req.body.aptName;
@@ -250,6 +251,7 @@ exports.signupSeller = (req, res, next) => {
         imageUrl: arrayFiles,
         minOrderAmount: minOrderAmount,
         costForOne: costForOne,
+        remainingSeats: remainingSeats,
         account: savedAccount,
         payment: paymentArray,
         formattedAddress: formattedAddress,
@@ -286,6 +288,8 @@ exports.signupSeller = (req, res, next) => {
       next(err);
     });
 };
+
+
 
 exports.imagesTest = (req, res, next) => {
   // if (!req.files) {

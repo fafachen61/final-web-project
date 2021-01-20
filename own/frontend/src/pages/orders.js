@@ -24,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Orders = (props) => {
+ 
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.data);
+  console.log(`orders=${orders}`)
   const {
     account: { role },
     _id,
@@ -42,7 +44,7 @@ const Orders = (props) => {
       }
       if (data.action === "create") {
         dispatch(getOrders());
-        dispatch(getOrders());
+        //dispatch(getOrders());
       }
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -58,7 +60,7 @@ const Orders = (props) => {
           <Grid container spacing={2}>
             {orders ? (
               orders.length > 0 ? (
-                orders.map((order) => (
+                orders.map((order,index) => (
                   <Grid item xs={12} sm={4} key={order._id}>
                     <OrderCard order={order} role={role} />
                   </Grid>

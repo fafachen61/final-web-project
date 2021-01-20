@@ -43,6 +43,7 @@ function Restaurant(props) {
     tags,
     costForOne,
     minOrderAmount,
+    remainingSeats,
     payment,
     address,
   } = props;
@@ -52,7 +53,7 @@ function Restaurant(props) {
 
   if (address) {
     phoneNo = address.phoneNo;
-    addressString = `${address.aptName}, ${address.locality}, ${address.street}`;
+    addressString = ` ${address.locality}${address.street}${address.aptName}`;
   }
 
   if (payment ? payment.length === 1 : null)
@@ -95,11 +96,15 @@ function Restaurant(props) {
                 Address: {addressString}
               </Typography>
               <Typography variant="body2" color="textPrimary">
-                Call: +91 {phoneNo}
+                Call: +886 {phoneNo}
               </Typography>
               <Typography variant="body2" color="textPrimary">
                 Dine-In Timing: 1pm to 12am
               </Typography>
+              <Typography variant="body2" color="textPrimary">
+                remainingSeats: {remainingSeats}
+              </Typography>
+
             </Grid>
             <Grid item xs={12} sm={4} style={{ marginTop: 34 }}>
               {imageUrl ? (

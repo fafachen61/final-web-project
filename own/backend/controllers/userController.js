@@ -278,7 +278,7 @@ exports.getLoggedInUser = (req, res, next) => {
 exports.postOrder = (req, res, next) => {
   let accountObj;
   let userObj;
-  console.log(`req=${req}`)
+  console.log(`req.body=${req.body}`)
   Account.findById(req.loggedInUserId)
     .then((account) => {
       accountObj = account;
@@ -311,6 +311,8 @@ exports.postOrder = (req, res, next) => {
               userId: result,
             },
             items: items,
+            bookingTime: req.body.bookingTime,
+            bookingNumbers: req.body.bookingNumbers,
             status: "Placed",
             seller: {
               name: seller.name,

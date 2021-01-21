@@ -22,8 +22,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SimpleMap = () => {
-  const map_center = {lat: 25.01163,lng: 121.32165}
-  const map_center_zoom = 11
+  const map_center = {lat: 24.51163,lng: 121.32165}
+  const map_center_zoom = 9
   const K_size = 40
 
   /*const { loading } = useSelector((state) => state.data);
